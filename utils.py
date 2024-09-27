@@ -13,7 +13,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 
 
-client = OpenAI(api_key=api_key)
+client = OpenAI(api_key=None)
 
 
 def journalist_response(news_text):
