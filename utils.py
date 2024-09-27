@@ -6,15 +6,28 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
-load_dotenv()
+def get_api_key():
+    try:
+        # Try to get the API key from Streamlit secrets
+        api_key = os.getenv("OPENAI_API_KEY")
+        if api_key:
+            return api_key
+    except KeyError:
+        # If that fails, try to get the API key from environment variables
+        api_key = st.secrets["OPENAI_API_KEY"]
+        if api_key:
+            return api_key
+        else:
+            # If no valid API key is found, raise an error
+            raise ValueError("API key not found in Streamlit secrets or environment variables.")
 
-# Access the API key
-api_key = os.getenv("OPENAI_API_KEY")
-
-
-
-client = OpenAI(api_key=None)
-
+# Get the API key
+try:
+    api_key = get_api_key()
+    # Initialize the OpenAI API client by setting the API key in the configuration
+    client = OpenAI(api_key=api_key)  # Note: OpenAI client expects 'api_key' to be set like this
+except ValueError as e:
+    st.error(f"Error: {e}")
 
 def journalist_response(news_text):
     response = client.chat.completions.create(
