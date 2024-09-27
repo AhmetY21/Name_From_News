@@ -9,8 +9,28 @@ import os
 load_dotenv()
 
 # Access the API key
-api_key = os.getenv("OPENAI_API_KEY")
+def get_api_key():
+    try:
+        # First, try to get the API key from Streamlit secrets
+        api_key = st.secrets["OPENAI_API_KEY"]
+        if api_key:
+            return api_key
+    except KeyError:
+        # If it fails, try getting the API key from environment variables
+        api_key = os.getenv("OPENAI_API_KEY")
+        if api_key:
+            return api_key
+        else:
+            # Raise an error if neither source has the API key
+            raise ValueError("API key not found in Streamlit secrets or environment variables.")
 
+# Get the API key
+try:
+    api_key = get_api_key()
+# Initialize the OpenAI client with the valid API key
+    client = openai.OpenAI(api_key=api_key)
+except ValueError as e:
+    st.error(f"Error: {e}")
 
 
 client = OpenAI(api_key=api_key)
