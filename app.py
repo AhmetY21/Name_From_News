@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import openai 
 from utils import journalist_response
 
-# Load environment variables (API key)
 load_dotenv()
 
 # Access the OpenAI API key
@@ -14,7 +13,6 @@ api_key = os.getenv("OPENAI_API_KEY")
 openai.api_key = api_key
 
 # Journalist response function for name extraction
-
 
 # Streamlit App
 st.markdown("<h1 style='text-align: center; color: darkblue; font-size: 3em;'>✨ Extract Names from News ✨</h1>", unsafe_allow_html=True)
